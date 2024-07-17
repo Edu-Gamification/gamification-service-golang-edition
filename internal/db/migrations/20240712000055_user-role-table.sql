@@ -1,13 +1,10 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TABLE roles
+CREATE TABLE user_role
 (
-    id   BIGINT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE
+    user_id BIGINT NOT NULL REFERENCES users(id),
+    role_id BIGINT NOT NULL REFERENCES roles(id)
 );
-CREATE SEQUENCE roles_id_seq START 1 INCREMENT BY 1;
-ALTER TABLE roles
-    ALTER COLUMN id SET DEFAULT NEXTVAL('roles_id_seq');
 -- +goose StatementEnd
 
 -- +goose Down
