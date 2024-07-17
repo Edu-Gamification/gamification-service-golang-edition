@@ -32,8 +32,9 @@ func main() {
 
 	router := handler.InitRouter()
 
-	inits.UserInit(db, router)
-	inits.ClanInit(db, router)
+	//inits.UserInit(db, router)
+	//inits.ClanInit(db, router)
+	inits.Init(db, router)
 	router.Get("/swagger/*", httpSwagger.Handler(
 		httpSwagger.URL("http://localhost:8080/swagger/doc.json")))
 

@@ -6,8 +6,9 @@ import (
 )
 
 const (
-	userPrefix = "/api/users"
-	clanPrefix = "/api/clans"
+	userPrefix  = "/api/users"
+	clanPrefix  = "/api/clans"
+	eventPrefix = "/api/events"
 )
 
 func InitRouter() *chi.Mux {
@@ -24,4 +25,9 @@ func (userHandler *UserHandler) InitUserRoutes(r *chi.Mux) {
 func (clanHandler *ClanHandler) InitClanRoutes(r *chi.Mux) {
 	r.Get(clanPrefix, clanHandler.getAllClans)
 	r.Get(clanPrefix+"/{id}", clanHandler.getClanById)
+}
+
+func (eventHandler *EventHandler) InitEventRoutes(r *chi.Mux) {
+	//r.Get(eventPrefix, eventHandler.)
+	r.Get(eventPrefix+"/{id}", eventHandler.getEventByID)
 }

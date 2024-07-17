@@ -65,3 +65,53 @@ func (eventRepository *EventRepository) FindEventsByType(eType domain.EventType)
 	}
 	return events, nil
 }
+
+func (eventRepository *EventRepository) FindEventById(id int64) (domain.Event, error) {
+	var event domain.Event
+
+	err := eventRepository.db.QueryRow("select * from events where id = $1", id).Scan(&event.Id,
+		&event.Title, &event.Description, &event.Type, &event.StartTime, &event.EndTime, &event.Quote, &event.ClanOnly)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return domain.Event{}, errors2.ErrNotFound
+		}
+		return domain.Event{}, err
+	}
+	return event, nil
+}
+
+func (eventRepository *EventRepository) FindEventAuthorsID(eventId int64) ([]int64, error) {
+	var authors []int64
+
+	rows, err := eventRepository.db.Query("select * from events_authors where event_id = $1", eventId)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		var id int64
+		err := rows.Scan(&id)
+		if err != nil {
+			return nil, err
+		}
+		authors = append(authors, id)
+	}
+	return authors, nil
+}
+
+func (eventRepository *EventRepository) FindEventParticipantsID(eventId int64) ([]int64, error) {
+	var participants []int64
+
+	rows, err := eventRepository.db.Query("select * from events_participants where event_id = $1", eventId)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		var id int64
+		err := rows.Scan(&id)
+		if err != nil {
+			return nil, err
+		}
+		participants = append(participants, id)
+	}
+	return participants, nil
+}
